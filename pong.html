@@ -7,6 +7,7 @@
         let cnv, ctx;
         let x = 200;
         let y = 100;
+        let rotace = 0;
         let xPosl = -1;
         let yPosl = -1;
         let draha = new Array();
@@ -40,15 +41,27 @@
 
             if (moveRight){
                 x = x + 1;
+                if (x > 800-20) {
+                    x = 800-20;
+                }
             }
             if (moveLeft){
                 x = x - 1;
+                if (x < 20) {
+                    x = 20;
+                }
             }
             if (moveDown){
                 y = y + 1;
+                if (y > 600-20) {
+                    y = 600-20;
+                }
             }
             if (moveUp){
                 y = y - 1;
+                if (y < 20) {
+                    y = 20;
+                }
             }
 
             if (x != xPosl || y != yPosl){ //zmenila se pozice postavy
@@ -60,6 +73,7 @@
                 yPosl = y; //posledn ulozenou pozici y musim nastavit na tu aktualni
             }
 
+            /*
             for (let bod of draha){
                 ctx.beginPath();
                 ctx.lineWidth = 1;
@@ -67,8 +81,10 @@
                 ctx.arc(bod.x,bod.y,1,0,2*3.14);
                 ctx.fill();
             }
+            */
             let bodPredch = {x:-1000,y:-1000};
             let pocetTelicek = 5;
+            let kresliText = true;
             for (let bod of draha){
                 if (vzdalenostBodu(bod, bodPredch) > 36){
                     ctx.beginPath();
@@ -76,6 +92,15 @@
                     ctx.fillStyle = "green";
                     ctx.arc(bod.x,bod.y,20,0,2*3.14);
                     ctx.fill();
+
+                    if (kresliText){
+                        ctx.lineWidth = 1;
+                        ctx.fillStyle = "black";
+                        ctx.font = "16px consolas";
+                        ctx.fillText("bobicek", bod.x,bod.y);
+                        kresliText = false;
+                    }
+
                     bodPredch = bod;
                     pocetTelicek--;
                     if (pocetTelicek == 0){
@@ -84,13 +109,17 @@
                 }
             }
 
-            ctx.beginPath();
-            ctx.lineWidth = 2;
-            ctx.fillStyle = "green";
-            ctx.arc(x,y,20,0,2*3.14);
-            ctx.fill();
-
             ctx.drawImage(img, 400,100,50,50);
+
+            ctx.lineWidth = 1;
+            ctx.fillStyle = "yellow";
+            ctx.font = "120px Consolas";
+            ctx.save();
+            rotace = rotace + 0.01;
+            ctx.translate(300, 200);
+            ctx.rotate(rotace);
+            ctx.fillText("mimon", -300,-100);
+            ctx.restore();
         }
         let moveUp,moveDown,moveRight,moveLeft;
         function onKeyDown(event){
